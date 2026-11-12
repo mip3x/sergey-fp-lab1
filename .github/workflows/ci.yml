@@ -6,21 +6,23 @@ jobs:
   haskell:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: haskell-actions/setup@v2
         with:
           ghc-version: "9.6"
       - run: |
           mkdir -p build
           ghc -Wall -outputdir build -o build/main Main.hs
+          ghc -Wall -outputdir build -o build/test Test.hs
+          build/test
           build/main | tee out.txt
           test "$(cat out.txt)" = "$(printf '[6857,6857,6857,6857,6857,6857]\n[1074,1074,1074,1074,1074,1074]')"
 
   java:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "21"
