@@ -5,16 +5,12 @@ on: [push, pull_request]
 jobs:
   haskell:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dir: [".", "commented"]
     steps:
       - uses: actions/checkout@v4
       - uses: haskell-actions/setup@v2
         with:
           ghc-version: "9.6"
-      - working-directory: ${{ matrix.dir }}
-        run: |
+      - run: |
           mkdir -p build
           ghc -Wall -outputdir build -o build/main Main.hs
           build/main | tee out.txt
@@ -22,16 +18,13 @@ jobs:
 
   java:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dir: ["java", "commented/java"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "21"
-      - working-directory: ${{ matrix.dir }}
+      - working-directory: java
         run: |
           javac -d build *.java
           test "$(java -cp build Problem3)" = 6857
